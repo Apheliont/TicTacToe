@@ -1,0 +1,129 @@
+body {
+    background: url('images/bg2.png') repeat;
+}
+
+.container {
+    text-align: center;
+    margin: 50px auto;
+    padding: 50px;
+    box-shadow: rgba(0,0,0,.4) 5px 5px 10px;
+    background: linear-gradient( rgba(187, 187, 187, 0.51), transparent 1px), linear-gradient( 90deg, rgba(187, 187, 187, 0.5), rgb(242, 242, 242) 1px);
+    background-size: 15px 15px;
+    background-position: center center;
+}
+
+.board {
+    border: 1px solid grey;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+}
+.board td {
+    border: 5px solid rgba(32, 24, 109, 0.76);
+
+}
+
+.board tr {
+    border: 1px solid grey;
+}
+.gameMessageWindow {
+
+}
+
+.changeBorderButton {
+
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #e1e1e1;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(32, 24, 109, 0.9);
+    outline: none;
+}
+
+.newGameButton {
+    margin-right: 20px;
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid grey;
+    border-radius: 5px;
+    background-color: #e1e1e1;
+    font-size: 18px;
+    font-weight: bold;
+    color: rgba(32, 24, 109, 0.9);
+    outline: none;
+}
+
+.messageContinue {
+    padding: 10px;
+}
+
+.button-no, .button-yes {
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #d4d4d4;
+    outline: none;
+    width: 50px;
+}
+.button-yes {
+    margin-right: 20px;
+}
+
+.boardSize-input {
+    width: 200px;
+    padding: 5px 10px 5px 20px;
+    margin: 30px auto;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid grey;
+}
+
+.boardSize-input::-webkit-outer-spin-button,
+.boardSize-input::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+}
+
+.boardSize-button {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    margin: auto;
+    background-color: #d4d4d4;
+    outline: none;
+}
+
+.bgScreen {
+    display: none;
+    position: fixed;
+    z-index: 9000;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(120, 133, 9, 0.34);
+}
+.modalWindow {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    border-radius: 10px;
+    background-color: #f5f5f5;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.17) 5px 5px 5px;
+}
+
+.x {
+    background: url('images/Tic_Tac_Toe.png') no-repeat;
+    background-size: cover;
+    background-position-x: 107%;
+}
+
+.o {
+    background: url('images/Tic_Tac_Toe.png') no-repeat;
+    background-size: cover;
+    background-position-x: -7%;
+}
