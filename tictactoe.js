@@ -215,12 +215,16 @@ function init() {
       modalWindow.addElements(message, askInput, askButton);
       modalWindow.showWindow();
 
+      askInput.focus();
+
       let setMessageInput1 = setMessageTemporary (message.textContent, 'Только цифры!', 2000);
       let setMessageInput2 = setMessageTemporary (message.textContent, 'Только 2 знака!', 2000);
       let setMessageButton = setMessageTemporary (message.textContent, 'Неверное значение!', 2000);
 
       askInput.addEventListener('keypress', function inputHandler(e){
-        if (!/\d$/.test(String.fromCharCode(e.charCode))) {
+        if (e.keyCode === 13) {
+          enterSize();
+        } else if (!/\d$/.test(String.fromCharCode(e.charCode))) {
           setMessageInput1();
           e.preventDefault();
         } else if (e.target.value.length >= 2) {
@@ -228,7 +232,10 @@ function init() {
           e.preventDefault();
         }
       });
-      askButton.addEventListener('click', function(e){
+
+      askButton.addEventListener('click', enterSize);
+
+      function enterSize() {
         if (+askInput.value < 3 || +askInput.value > 10) {
           setMessageButton();
           return false;
@@ -238,8 +245,7 @@ function init() {
         clearAllData();
         initiateStateObj(+askInput.value);
         startNewGame();
-      });
-
+      }
 
       function setMessageTemporary(original, temporary, time) {
         let state = null;
