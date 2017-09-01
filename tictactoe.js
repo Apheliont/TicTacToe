@@ -54,6 +54,8 @@ function init() {
     let modalWindow = {
       bgScreen: null,
       messageWindow: null,
+      closeButton: null,
+      stateOpenTimerId: null,
       initWindow: function(height, width) {
 
         if (document.body.contains(this.messageWindow)) {
@@ -63,13 +65,16 @@ function init() {
 
         this.bgScreen = document.createElement('div');
         this.messageWindow = document.createElement('div');
+        this.closeButton = document.createElement('button');
 
         this.messageWindow.style.height = height + 'px';
         this.messageWindow.style.width = width + 'px';
 
-        this.messageWindow.classList.add('modalWindow');
-        this.bgScreen.classList.add('bgScreen');
+        this.messageWindow.classList.add('modalWindow', 'modalWindow--hidden');
+        this.bgScreen.classList.add('bgScreen', 'bgScreen--hidden');
+        this.closeButton.classList.add('modalWindow__closeButton');
 
+        this.messageWindow.appendChild(this.closeButton);
         document.body.appendChild(this.bgScreen);
         document.body.appendChild(this.messageWindow);
 
@@ -77,15 +82,31 @@ function init() {
           parseInt(getComputedStyle(this.messageWindow).height) / 2 + 'px';
         this.messageWindow.style.left = (document.documentElement.clientWidth / 2) -
           parseInt(getComputedStyle(this.messageWindow).width) / 2 + 'px';
+
+        this.closeButton.addEventListener('click', this.hideWindow.bind(this));
       },
       showWindow: function() {
-        this.messageWindow.style.display = 'block';
-        this.bgScreen.style.display = 'block';
+        if (this.stateOpenTimerId) {
+          clearTimeout(this.stateOpenTimerId);
+        }
+        let that = this;
+        setTimeout(function(){
+          that.messageWindow.classList.remove('modalWindow--hidden');
+          that.bgScreen.classList.remove('bgScreen--hidden');
+        },20);
       },
       hideWindow: function() {
         this.messageWindow.innerHTML = '';
-        this.messageWindow.style.display = 'none';
-        this.bgScreen.style.display = 'none';
+        this.messageWindow.classList.add('modalWindow--hidden');
+        this.bgScreen.classList.add('bgScreen--hidden');
+
+        let that = this;
+        this.stateOpenTimerId = setTimeout(function(){
+          that.messageWindow.style.display = 'none';
+          that.bgScreen.style.display = 'none';
+
+          that.stateOpenTimerId = null;
+        }, 300);
       },
       addElements: function() {
         let elemNumber = arguments.length;
@@ -159,9 +180,10 @@ function init() {
 
     function whoseTurnIsNow() {
       if (stateObj.crossIsNext) {
-        setMessage('O ходит');
+        setTimeout(function(){setMessage('Ходит ⬤');},100);
+
       } else {
-        setMessage('X ходит');
+        setTimeout(function(){setMessage('Ходит ✘');},100);
       }
     }
 
@@ -177,27 +199,38 @@ function init() {
     }
 
     function askUserBoardSize() {
-
+      let message = document.createElement('p');
       let askInput = document.createElement('input');
       let askButton = document.createElement('button');
+      message.textContent = 'Введите размер игрового поля:';
+      message.classList.add('message-boardSize');
       askButton.innerHTML = 'Начать игру';
       askButton.classList.add('boardSize-button');
 
       askInput.classList.add('boardSize-input');
-      askInput.setAttribute('placeholder', 'Введите число от 3 до 10');
+      askInput.setAttribute('placeholder', 'от 3 до 10');
       askInput.type = 'number';
 
-      modalWindow.initWindow(150, 300);
-      modalWindow.addElements(askInput, askButton);
+      modalWindow.initWindow(170, 300);
+      modalWindow.addElements(message, askInput, askButton);
       modalWindow.showWindow();
 
+      let setMessageInput1 = setMessageTemporary (message.textContent, 'Только цифры!', 2000);
+      let setMessageInput2 = setMessageTemporary (message.textContent, 'Только 2 знака!', 2000);
+      let setMessageButton = setMessageTemporary (message.textContent, 'Неверное значение!', 2000);
+
       askInput.addEventListener('keypress', function inputHandler(e){
-        if (!/^[0-9]?$/.test(e.target.value) || String.fromCharCode(e.charCode) === 'e') {
+        if (!/\d$/.test(String.fromCharCode(e.charCode))) {
+          setMessageInput1();
+          e.preventDefault();
+        } else if (e.target.value.length >= 2) {
+          setMessageInput2();
           e.preventDefault();
         }
       });
       askButton.addEventListener('click', function(e){
         if (+askInput.value < 3 || +askInput.value > 10) {
+          setMessageButton();
           return false;
         }
 
@@ -206,6 +239,21 @@ function init() {
         initiateStateObj(+askInput.value);
         startNewGame();
       });
+
+
+      function setMessageTemporary(original, temporary, time) {
+        let state = null;
+        return function() {
+          if (state) return;
+          message.textContent = temporary;
+          state = 1;
+            setTimeout(function(){
+              message.textContent = original;
+              state = null;
+            }, time);
+        };
+
+      }
     }
 
     function askUserContinueGame() {
@@ -256,7 +304,7 @@ function init() {
     }
 
     function setMessage(text) {
-      messageWindow.textContent = text;
+      messageWindow.innerHTML = text;
     }
 
     function putSymbol(event) {
@@ -301,9 +349,9 @@ function init() {
       if (winner > 0) {
         board.removeEventListener('click', nextStep);
         switch(winner) {
-            case 1: setMessage('O выйграли!'); break;
-            case 2: setMessage('X выйграли!'); break;
-            case 3: setMessage('Ничья!'); break;
+            case 1: setMessage('Победил ⬤!'); break;
+            case 2: setMessage('Победил ✘!'); break;
+            case 3: setMessage('✘ Ничья! ⬤'); break;
           }
         clearStorage();
         return true;

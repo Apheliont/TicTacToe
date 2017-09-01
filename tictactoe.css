@@ -1,8 +1,42 @@
+@keyframes modalWindow {
+    from {
+        transform: scale(2);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+@keyframes modalWindow-reverse {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(2);
+    }
+}
+
+@keyframes bgScreen {
+    0% {
+        background-color: rgba(61, 141, 164, 0.5);
+    }
+    50% {
+        background-color: rgba(127, 127, 127, 0.5);
+    }
+    75% {
+        background-color: rgba(161, 36, 164, 0.5);
+    }
+    to {
+        background-color: rgba(164, 161, 33, 0.5);
+    }
+}
+
+
 body {
     background: url('images/bg2.png') repeat;
 }
 
 .container {
+    position: relative;
     text-align: center;
     margin: 50px auto;
     padding: 50px;
@@ -12,9 +46,19 @@ body {
     background-position: center center;
 }
 
+.gameMessageWindow {
+    font-size: 24px;
+    position: absolute;
+    top: 40px;
+    left: 210px;
+
+}
+
+
 .board {
     border: 1px solid grey;
     border-collapse: collapse;
+    margin-top: 50px;
     margin-bottom: 30px;
 }
 .board td {
@@ -24,9 +68,6 @@ body {
 
 .board tr {
     border: 1px solid grey;
-}
-.gameMessageWindow {
-
 }
 
 .changeBorderButton {
@@ -59,6 +100,11 @@ body {
     padding: 10px;
 }
 
+.message-boardSize {
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+
 .button-no, .button-yes {
     padding: 10px;
     border-radius: 5px;
@@ -72,9 +118,9 @@ body {
 }
 
 .boardSize-input {
-    width: 200px;
+    width: 80px;
     padding: 5px 10px 5px 20px;
-    margin: 30px auto;
+    margin-bottom: 20px;
     outline: none;
     border-radius: 5px;
     border: 1px solid grey;
@@ -97,23 +143,47 @@ body {
 }
 
 .bgScreen {
-    display: none;
     position: fixed;
     z-index: 9000;
     top: 0;
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: rgba(120, 133, 9, 0.34);
+    background-color: rgba(61, 56, 58, 0.75);
+    transition: all 1s;
+    animation: bgScreen 10s infinite alternate;
 }
+
+.bgScreen--hidden {
+    opacity: 0;
+}
+
 .modalWindow {
-    display: none;
     position: fixed;
     z-index: 9999;
     border-radius: 10px;
     background-color: #f5f5f5;
     text-align: center;
     box-shadow: rgba(0, 0, 0, 0.17) 5px 5px 5px;
+    animation: modalWindow 0.3s ease-in-out;
+    transition: all 0.3s;
+}
+
+.modalWindow--hidden {
+    opacity: 0;
+    animation: modalWindow-reverse 0.3s;
+}
+
+.modalWindow__closeButton {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    clip-path: polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%);
+    background-color: #ababab;
+    border: none;
+    outline: none;
 }
 
 .x {
