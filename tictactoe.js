@@ -180,7 +180,7 @@ function init() {
 
     function whoseTurnIsNow() {
       if (stateObj.crossIsNext) {
-        setTimeout(function(){setMessage('Ходит ⬤');},100);
+        setTimeout(function(){setMessage('Ходит ◯');},100);
 
       } else {
         setTimeout(function(){setMessage('Ходит ✘');},100);
@@ -238,6 +238,7 @@ function init() {
       function enterSize() {
         if (+askInput.value < 3 || +askInput.value > 10) {
           setMessageButton();
+          askInput.focus();
           return false;
         }
 
